@@ -31,7 +31,7 @@ public class GestoreNegozio {
 		this.listaProdotti.add( new Prodotto(codice, nome, descrizione, prezzo, quantitaDisp) );
 	}
 
-	
+
 	/**
 	 * Produce una serie di Report sulla spesa dei clienti
 	 * @param N è il numero minimo di spesa affinchè venga generato un report
@@ -73,7 +73,7 @@ public class GestoreNegozio {
 		}
 		return importo;
 	}
-	
+
 	/**
 	 * Funzione per semplificare la ricerca all'interno della lista [vedi @return]
 	 * @param index è l'indice in cui risiede il prodotto desiderato nella lista
@@ -83,7 +83,7 @@ public class GestoreNegozio {
 	{
 		return this.listaProdotti.get(index);
 	}
-	
+
 	public ArrayList<Prodotto> getListaProdotti() {
 		return this.listaProdotti;
 	}

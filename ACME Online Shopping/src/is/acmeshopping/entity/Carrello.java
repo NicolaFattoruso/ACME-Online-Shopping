@@ -39,7 +39,7 @@ public class Carrello {
 		}
 
 	}
-	
+
 	public ArrayList<QuantitaProdotti> getCarrello()
 	{
 		return this.carrello;

@@ -1,6 +1,7 @@
 package is.acmeshopping.test;
 
 import static org.junit.Assert.*;
+import is.acmeshopping.entity.*;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,14 @@ import is.acmeshopping.entity.Carrello;
 import is.acmeshopping.entity.Report;
 
 public class Tests {
+	final int DASH = 0;
+	final int ORALB = 1;
+	final int SVELTO = 2;
+	final int STANHOME = 3;
+	final int GERARDO = 0;
+	final int ANTONIO = 1;
+
+
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -57,6 +66,7 @@ public class Tests {
 
 	@Test
 	public void test2() {
+
 		System.out.println("\n~~ TEST 2 ~~");
 		GestioneClienti gCliente = new GestioneClienti();
 		GestoreNegozio gNegozio = new GestoreNegozio();
@@ -66,17 +76,20 @@ public class Tests {
 		gNegozio.inserisciProdotto(2, "SVELTO", "Detersivo per piatti", 1.00f,  9);
 		gNegozio.inserisciProdotto(3, "Stan-Home", "Sgrassatore", 1.10f,  20);
 
+
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1); 
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 0);
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -84,7 +97,7 @@ public class Tests {
 
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
 
 		for (Report report : reports)   { System.out.println(report); }
 
@@ -105,18 +118,19 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1); 
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			//Gerardo fa due spese, Antonio 1
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -125,14 +139,14 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
 
-	
+
 	@Test
 	public void test4() {
 		System.out.println("\n~~ TEST 4 ~~");
@@ -147,14 +161,15 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 1);
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -163,15 +178,15 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(0, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(1, gCliente.getCliente(0), 4));
-		oracolo.add(new Report(1, gCliente.getCliente(1), 4));
-		
+		oracolo.add(new Report(1, gCliente.getCliente(GERARDO), 4));
+		oracolo.add(new Report(1, gCliente.getCliente(ANTONIO), 4));
+
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
-	
+
 
 	@Test
 	public void test5() {
@@ -187,19 +202,22 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2);
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
+
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -208,13 +226,13 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(1, null));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		
+
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
 
-	
+
 	@Test
 	public void test6() {
 		System.out.println("\n~~ TEST 6 ~~");
@@ -229,14 +247,15 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 1);
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -245,7 +264,7 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		
+
 
 		for (Report report : reports)   { System.out.println(report); }
 
@@ -266,17 +285,19 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH),2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -285,14 +306,14 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
-		
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
+
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
-	
+
 	@Test
 	public void test8() {
 		System.out.println("\n~~ TEST 8 ~~");
@@ -307,19 +328,21 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
 
-			
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -328,16 +351,16 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
-		oracolo.add(new Report(2, gCliente.getCliente(1), 5));
-		
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(ANTONIO), 5));
+
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
 
-	
+
 	@Test
 	public void test9() {
 		System.out.println("\n~~ TEST 9 ~~");
@@ -352,19 +375,21 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2); 
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
 
-			
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -373,15 +398,15 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(1, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
-		oracolo.add(new Report(2, gCliente.getCliente(1), 5));
-		
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(ANTONIO), 5));
+
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
-	
+
 	@Test
 	public void test10() {
 		System.out.println("\n~~ TEST 10 ~~");
@@ -396,19 +421,22 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2);
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
 
-			
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
+
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -424,8 +452,8 @@ public class Tests {
 		assertEquals(oracolo, reports);
 	}
 
-	
-	
+
+
 	@Test
 	public void test11() {
 		System.out.println("\n~~ TEST 11 ~~");
@@ -440,19 +468,21 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2);
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
 
-			
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -461,15 +491,15 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(2, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
-		oracolo.add(new Report(2, gCliente.getCliente(1), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(ANTONIO), 5));
 
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
-	
+
 	@Test
 	public void test12() {
 		System.out.println("\n~~ TEST 12 ~~");
@@ -484,19 +514,21 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
 		try
 		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2);
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
+			Carrello carrello1 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(DASH), 2)
+					);
+			Carrello carrello2 = new Carrello(
+					new QuantitaProdotti(gNegozio.getProdotto(SVELTO), 1)
+					);
 
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello1.getCarrello(), 0);
-			gCliente.faiSpesa(gCliente.getCliente(0), carrello2.getCarrello(), 1);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello1.getCarrello(), 2);
-			gCliente.faiSpesa(gCliente.getCliente(1), carrello2.getCarrello(), 3);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello1.getCarrello(), 0);
+			gCliente.faiSpesa(gCliente.getCliente(GERARDO), carrello2.getCarrello(), 1);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello1.getCarrello(), 2);
+			gCliente.faiSpesa(gCliente.getCliente(ANTONIO), carrello2.getCarrello(), 3);
 
-			
+
 		}
 		catch (AcmeException e) {
 			e.printStackTrace();
@@ -505,15 +537,15 @@ public class Tests {
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(1, gCliente.getListaClienti()));
 
 		ArrayList<Report> oracolo = new ArrayList<Report>();
-		oracolo.add(new Report(2, gCliente.getCliente(0), 5));
-		oracolo.add(new Report(2, gCliente.getCliente(1), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(GERARDO), 5));
+		oracolo.add(new Report(2, gCliente.getCliente(ANTONIO), 5));
 
 
 		for (Report report : reports)   { System.out.println(report); }
 
 		assertEquals(oracolo, reports);
 	}
-	
+
 	@Test
 	public void test13() {
 		System.out.println("\n~~ TEST 13 ~~");
@@ -528,18 +560,6 @@ public class Tests {
 		gCliente.creaCliente("Gerardo", "12345", "3365489604", "5333-1710-8765-2982");
 		gCliente.creaCliente("Antonio", "qwerty", "3356986709", "5333-1710-4387-7645");
 
-		Carrello carrello1 = new Carrello();
-		Carrello carrello2 = new Carrello();
-		try
-		{
-			carrello1.aggiungiAlCarrello(gNegozio.getProdotto(0), 2);
-			carrello2.aggiungiAlCarrello(gNegozio.getProdotto(2), 1);
-
-			
-		}
-		catch (AcmeException e) {
-			e.printStackTrace();
-		}
 
 		ArrayList<Report> reports = new ArrayList<Report>(gNegozio.generaReport(1, gCliente.getListaClienti()));
 
@@ -550,6 +570,5 @@ public class Tests {
 
 		assertEquals(oracolo, reports);
 	}
-	
-	
+
 }

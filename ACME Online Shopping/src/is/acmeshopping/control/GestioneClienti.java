@@ -9,13 +9,13 @@ import java.util.*;
  */
 public class GestioneClienti {
 
-	private ArrayList<Cliente> listaClienti;
+	private LinkedList<Cliente> listaClienti;
 
 
 
 	public GestioneClienti()
 	{
-		this.listaClienti = new ArrayList<Cliente>();
+		this.listaClienti = new LinkedList<Cliente>();
 	}
 
 
@@ -59,7 +59,7 @@ public class GestioneClienti {
 		return this.listaClienti.get(index);
 	}
 	
-	public ArrayList<Cliente> getListaClienti()
+	public LinkedList<Cliente> getListaClienti()
 	{
 		return this.listaClienti;
 	}

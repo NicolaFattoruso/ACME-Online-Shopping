@@ -2,14 +2,22 @@ package is.acmeshopping.entity;
 
 import java.util.ArrayList;
 
-
 public class Carrello {
 
 	private ArrayList<QuantitaProdotti> carrello;
 
 
-	public Carrello(){
+	/**
+	 * Il costruttore costruisce il carrello con l'array di prodotti passati come parametri d'ingresso
+	 * @param prodottis è un array di QuantitaProdotti (coppia prodotto - quantita)
+	 * @throws AcmeException viene fatto un throw se la quantita richiesta non è disponibile!
+	 */
+	public Carrello(QuantitaProdotti ...prodottis ) throws AcmeException{
 		this.carrello = new ArrayList<QuantitaProdotti>();
+		for ( QuantitaProdotti p : prodottis)
+		{
+			aggiungiAlCarrello(p.getProdotto(), p.getQuantita());
+		}
 	}
 
 	/**
